@@ -30,7 +30,7 @@ jobs:
         cargo build --release
     
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: zstd_compress
         path: target/release/zstd_compress
