@@ -13,24 +13,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     
-    - name: Install Rust
-      uses: actions-rs/toolchain@v1
-      with:
-        toolchain: stable
-        profile: minimal
-        override: true
-    
-    - name: Install system dependencies
+    - name: Install build dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libhdfs-dev libssl-dev
+        sudo apt-get install -y gcc make libhdfs-dev libzstd-dev libzstd1
     
-    - name: Build with cargo
+    - name: Build with make
       run: |
-        cargo build --release
+        make
     
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: zstd_compress
-        path: target/release/zstd_compress
+        path: zstd_compress
