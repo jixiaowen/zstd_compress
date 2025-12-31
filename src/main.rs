@@ -1,9 +1,9 @@
-use std::env;
 use std::thread;
 use clap::Parser;
 use log::{debug, error, info, LevelFilter};
 use env_logger::Builder;
 
+mod libhdfs;
 mod hdfs;
 mod compression;
 
@@ -19,8 +19,7 @@ struct Args {
     threads: usize,
 }
 
-#[tokio::main]
-async fn main() -> Result<(), anyhow::Error> {
+fn main() -> Result<(), anyhow::Error> {
     // Initialize logger
     Builder::new()
         .filter_level(LevelFilter::Info)
@@ -59,19 +58,19 @@ async fn main() -> Result<(), anyhow::Error> {
     };
     
     // Check if input file exists
-    if !hdfs_handler.file_exists(&args.input_path).await? {
+    if !hdfs_handler.file_exists(&args.input_path)? {
         error!("Input file does not exist: {}", args.input_path);
         std::process::exit(1);
     }
     
     // Read input file
-    let data = hdfs_handler.read_file(&args.input_path).await?;
+    let data = hdfs_handler.read_file(&args.input_path)?;
     
     // Compress data
     let compressed_data = compression::compress_data(&data, num_threads)?;
     
     // Write compressed data to output file
-    hdfs_handler.write_file(&output_path, &compressed_data).await?;
+    hdfs_handler.write_file(&output_path, &compressed_data)?;
     
     info!("Compression completed successfully!");
     info!("Input: {}", args.input_path);

@@ -1,18 +1,13 @@
 use std::io::Write;
-use zstd::stream::{Encoder, encode_all, Decoder};
-use zstd::zstdmt::EncStreamBuilder;
 use log::{debug, info};
+use zstd::stream::Decoder;
 
 pub fn compress_data(data: &[u8], num_threads: usize) -> Result<Vec<u8>, anyhow::Error> {
     info!("Compressing data with {} threads", num_threads);
     debug!("Input data size: {} bytes", data.len());
     
-    let mut encoder = EncStreamBuilder::new()
-        .threads(num_threads)
-        .build(Vec::new())?;
-    
-    encoder.write_all(data)?;
-    let compressed = encoder.finish()?;
+    // Use zstd::bulk::compress which automatically uses multiple threads when zstdmt feature is enabled
+    let compressed = zstd::bulk::compress(data, 0)?;
     
     info!("Compression completed: {} bytes -> {} bytes (ratio: {:.2}x)", 
           data.len(), compressed.len(), 
