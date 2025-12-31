@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libhdfs-dev libssl-dev
+    
+    - name: Build with cargo
+      run: |
+        cargo build --release
+    
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: zstd_compress
+        path: target/release/zstd_compress
