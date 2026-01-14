@@ -19,7 +19,20 @@ namespace Reminder
 
         private void MainFrm_Load(object sender, EventArgs e)
         {
-            notifyIcon1.Icon = new Icon("ICO2.ico");
+            try
+            {
+                using (var stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reminder.ICO2.ico"))
+                {
+                    if (stream != null)
+                    {
+                        notifyIcon1.Icon = new Icon(stream);
+                    }
+                }
+            }
+            catch
+            {
+                notifyIcon1.Icon = System.Drawing.SystemIcons.Application;
+            }
             notifyIcon1.Visible = true;
         }
        
