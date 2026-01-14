@@ -123,7 +123,7 @@ namespace Reminder
             this.numWrkTime.Size = new System.Drawing.Size(51, 21);
             this.numWrkTime.TabIndex = 16;
             this.numWrkTime.Value = new decimal(new int[] {
-            60,
+            35,
             0,
             0,
             0});

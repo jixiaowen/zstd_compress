@@ -19,7 +19,8 @@ namespace Reminder
 
         private void MainFrm_Load(object sender, EventArgs e)
         {
-
+            notifyIcon1.Icon = new Icon("ICO2.ico");
+            notifyIcon1.Visible = true;
         }
        
 
@@ -88,6 +89,8 @@ namespace Reminder
             this.Visible = true;
             this.WindowState = FormWindowState.Normal;
             this.ShowInTaskbar = true;
+            this.BringToFront();
+            this.Activate();
         }
     }
 }
