@@ -1,0 +1,37 @@
+name: Build Windows Executable
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v2
+      
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v2
+      
+    - name: Restore NuGet packages
+      run: nuget restore "Reminder\Sedentary Reminder.csproj"
+      
+    - name: Build Release
+      run: msbuild "Reminder\Sedentary Reminder.csproj" /p:Configuration=Release /p:Platform="Any CPU" /p:OutputPath="bin\Release\"
+      
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: Reminder-Windows
+        path: |
+          Reminder/bin/Release/Reminder.exe
+          Reminder/bin/Release/*.dll
+        retention-days: 30
