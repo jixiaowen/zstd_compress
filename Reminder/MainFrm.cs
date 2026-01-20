@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -52,11 +52,7 @@ namespace Reminder
             int wrkTime = (int)this.numWrkTime.Value;
             int rstTime = (int)this.numRstTime.Value;
             
-            if (wrkFrm != null && !wrkFrm.IsDisposed)
-            {
-                wrkFrm.StopTimer();
-                wrkFrm.Close();
-            }
+            StopOldTimers();
             
             wrkFrm = new WorkFrm(wrkTime,rstTime,input_flag);
             wrkFrm.Show();
@@ -64,16 +60,42 @@ namespace Reminder
 
         }
 
+        private void StopOldTimers()
+        {
+            if (wrkFrm != null && !wrkFrm.IsDisposed)
+            {
+                wrkFrm.StopTimer();
+                wrkFrm.Close();
+            }
+
+            List<Form> formsToClose = new List<Form>();
+            foreach (Form f in Application.OpenForms)
+            {
+                if (f is WorkFrm || f is RestFrm)
+                {
+                    formsToClose.Add(f);
+                }
+            }
+            foreach (Form f in formsToClose)
+            {
+                if (f is WorkFrm)
+                {
+                    ((WorkFrm)f).StopTimer();
+                }
+                if (f is RestFrm)
+                {
+                    ((RestFrm)f).IsAborted = true;
+                    ((RestFrm)f).StopTimer();
+                }
+                f.Close();
+            }
+        }
+
         private void 主窗体ToolStripMenuItem_Click(object sender, EventArgs e)
         {            
             this.Visible = true;
             this.WindowState = FormWindowState.Normal;
-            if (wrkFrm!=null)
-            {
-                wrkFrm.Close();
-            }
-            
-
+            StopOldTimers();
         }
 
         private void MainFrm_FormClosing(object sender, FormClosingEventArgs e)

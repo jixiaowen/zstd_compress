@@ -18,6 +18,9 @@ namespace Reminder
         private bool input_flag;//是否选中锁定键盘
         private bool left_flag;//鼠标左键是否点击
         private Point mouseoff;
+
+        public bool IsAborted = false;
+
         public WorkFrm()
         {
             InitializeComponent();

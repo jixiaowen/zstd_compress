@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +18,9 @@ namespace Reminder
         private int rst_m2;
         private bool input_flag;
         int rst_s = 0;
+
+        public bool IsAborted = false;
+        private bool nextStarted = false;
         
         public RestFrm()
         {
@@ -125,12 +128,24 @@ namespace Reminder
 
                     if (rst_s == 0)
                     {
-                        WorkFrm workFrm = new WorkFrm(wrk_m, rst_m2, input_flag);
-                        workFrm.Show();
+                        StartNextWork();
                     }
                     this.Close();
                 }
             }
+        }
+
+        private void StartNextWork()
+        {
+            if (nextStarted || IsAborted) return;
+            nextStarted = true;
+            WorkFrm workFrm = new WorkFrm(wrk_m, rst_m2, input_flag);
+            workFrm.Show();
+        }
+
+        public void StopTimer()
+        {
+            timerRst.Enabled = false;
         }
 
         private void RestFrm_FormClosed(object sender, FormClosedEventArgs e)
@@ -142,9 +157,16 @@ namespace Reminder
         {
             // 关闭定时器，防止窗体关闭后定时器仍在运行
             timerRst.Enabled = false;
-            //WorkFrm workFrm = new WorkFrm(wrk_m, rst_m2, input_flag);
-           // workFrm.Show();
+            if (input_flag)
+            {
+                KeyboardBlocker.on();//解锁键盘
+            }
+            if (!IsAborted)
+            {
+                StartNextWork();
+            }
         }
+
 
         private void lblText_Click(object sender, EventArgs e)
         {
