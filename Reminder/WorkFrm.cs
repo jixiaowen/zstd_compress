@@ -34,8 +34,8 @@ namespace Reminder
             this.wrk_m = wrk_minutes;
             this.input_flag = input_flag;
 
-            int x = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Width - this.Width) / 2;
-            int y = 10;
+            int x = 10;
+            int y = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Height - this.Height - 10;
             Point p = new Point(x, y);
             this.PointToScreen(p);
             this.Location = p;
