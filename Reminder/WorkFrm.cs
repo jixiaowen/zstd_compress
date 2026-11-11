@@ -28,20 +28,20 @@ namespace Reminder
         //定义一个构造函数，接受前一个窗体传来的参数
         public WorkFrm(int wrk_minutes, int rst_minutes,bool input_flag)
         {
-            InitializeComponent();           
+            InitializeComponent();
             this.wrk_minutes = wrk_minutes;
             this.rst_minutes = rst_minutes;
             this.wrk_m = wrk_minutes;
             this.input_flag = input_flag;
 
-            int x = 10;
-            int y = System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Height - this.Height - 10;
+            int x = (System.Windows.Forms.Screen.PrimaryScreen.WorkingArea.Size.Width - this.Width) / 2 + 50;
+            int y = 10;
             Point p = new Point(x, y);
             this.PointToScreen(p);
             this.Location = p;
-            
+
         }
-        
+
         private void Form1_Load(object sender, EventArgs e)
         {
 
@@ -55,9 +55,9 @@ namespace Reminder
             //                (ScreenSize.Width - (ScreenSize.Width - OutTaskBarSize.Width)),
             //                (ScreenSize.Height - OutTaskBarSize.Height)
              //               );
-            
 
-            wrk_seconds = 0; 
+
+            wrk_seconds = 0;
 
             if (wrk_seconds >= 10)
             {
@@ -77,7 +77,7 @@ namespace Reminder
             }
 
             this.Opacity = 0.8;
-            
+
         }
 
         private void Timer1_Tick(object sender, EventArgs e)
@@ -103,7 +103,7 @@ namespace Reminder
                 {
                     lblSecond.Text = "0"+wrk_seconds.ToString();
                 }
-               
+
             }
             else //秒=0时，分钟-1
             {
@@ -117,12 +117,12 @@ namespace Reminder
                 {
                     lblMin.Text = "0"+wrk_minutes.ToString();
                 }
-                
+
                 if (wrk_minutes > -1) //若分钟不为0，秒回到60，继续递归
                 {
                     timerWrk.Enabled = true;
                     wrk_seconds = 60;
-                    
+
                     timing();
                 }
                 else
@@ -130,7 +130,7 @@ namespace Reminder
 
                     this.Close();
                     RestFrm restFrm = new RestFrm(rst_minutes, wrk_m, input_flag);
-                    restFrm.ShowDialog();                   
+                    restFrm.ShowDialog();
                 }
             }
         }
@@ -155,8 +155,8 @@ namespace Reminder
                 Point p = new Point(x, y);
                 this.PointToScreen(p);
                 this.Location = p;
-            }         
-            
+            }
+
         }
 
         /// <summary>
@@ -231,21 +231,21 @@ namespace Reminder
             mouseUp();
         }
 
-      
+
 
         private void LblWarn_MouseDown(object sender, MouseEventArgs e)
         {
-            
+
         }
 
         private void LblWarn_MouseMove(object sender, MouseEventArgs e)
         {
-           
+
         }
 
         private void LblWarn_MouseUp(object sender, MouseEventArgs e)
         {
-           
+
         }
     }
 }
